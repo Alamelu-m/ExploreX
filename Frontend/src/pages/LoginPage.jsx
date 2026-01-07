@@ -127,9 +127,9 @@
 
 
 import React, { useState } from "react";
-import logo from "../src/assets/Logo.svg";
+import logo from "../assets/Logo.svg";
 import { Link, useNavigate } from "react-router-dom";
-import API from "../src/api";
+import API from "../api";
 
 const LoginPage = () => {
   const navigate = useNavigate();
