@@ -127,7 +127,7 @@
 
 
 import React, { useState } from "react";
-import logo from "../assets/Logo.svg";
+import logo from "../assets/Logo3.png";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../api";
 
@@ -160,7 +160,12 @@ const LoginPage = () => {
         localStorage.setItem("token", res.data.token);
       }
 
+      if (res.data.user) {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+
       setTimeout(() => {
+        
         navigate("/home");
       }, 1000);
     } catch (err) {

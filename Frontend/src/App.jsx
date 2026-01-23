@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import ChatBot from "./components/ChatBot";
 import TripPlanPage from "./pages/TripPlanPage";
+import TripLoading from "./pages/TripLoading";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/chatbot" element={<ChatBot/>}/>
         <Route path="/plan" element={<TripPlanPage/>}/>
+        <Route path="/loading" element={<TripLoading/>}/>
 
       </Routes>
     </BrowserRouter>

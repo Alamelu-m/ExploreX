@@ -14,3 +14,39 @@
 .animate-slideIn {
   animation: slideIn 0.3s ease-out forwards;
 }
+
+/* Hide scrollbar but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ===== Horizontal Scrollbar Styling ===== */
+
+/* Chrome, Edge, Safari */
+.recommended-scroll::-webkit-scrollbar {
+  height: 18px; /* INCREASE scrollbar thickness */
+}
+
+.recommended-scroll::-webkit-scrollbar-track {
+  background: #e5e7eb; /* light gray */
+  border-radius: 10px;
+}
+
+.recommended-scroll::-webkit-scrollbar-thumb {
+  background: #3b82f6; /* blue */
+  border-radius: 10px;
+}
+
+.recommended-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+/* Firefox */
+.recommended-scroll {
+  scrollbar-width: thick;
+  scrollbar-color: #3b82f6 #e5e7eb;
+}
