@@ -1,31 +1,3 @@
-
-
-
-// import { Link } from "react-router-dom";
-
-// const Sidebar = ({ isOpen }) => {
-//   return (
-//     <div
-//       className={`fixed top-0 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-50
-//       ${isOpen ? "translate-x-0" : "-translate-x-full"} w-64`}
-//     >
-//       <div className="p-6 font-bold text-2xl text-blue-600">
-//         ExploreX
-//       </div>
-
-//       <nav className="flex flex-col gap-4 px-6 text-gray-700">
-//         <Link to="/home" className="hover:text-blue-600 font-medium">
-//           Home
-//         </Link>
-
-//         {/* More items later */}
-//         <span className="text-gray-400">More coming…</span>
-//       </nav>
-//     </div>
-//   );
-// };
-
-// export default Sidebar;
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ isOpen }) => {

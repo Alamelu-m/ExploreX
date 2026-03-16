@@ -1,47 +1,112 @@
 const axios = require("axios");
 const haversineDistance= require("../utils/distance");
 
+// const getCoordinates = async (place, city) => {
+//   try {
+//     const url = "https://api.geoapify.com/v1/geocode/search";
+
+//     const res = await axios.get(url, {
+//       params: {
+//         text: `${place}, ${city}`,
+//         limit: 1,
+//         apiKey: process.env.GEOAPIFY_API_KEY,
+//       },
+//     });
+
+//     // ❗ If no location found
+//     if (
+//       !res.data ||
+//       !res.data.features ||
+//       res.data.features.length === 0
+//     ) {
+//       return {
+//         formatted: `${place}, ${city}`,
+//         coordinates: null,
+//       };
+//     }
+
+//     const feature = res.data.features[0];
+//     const [lon, lat] = feature.geometry.coordinates;
+
+//     return {
+//       formatted: feature.properties.formatted,
+//       coordinates: {
+//         lat,
+//         lng: lon,
+//       },
+//     };
+//   } catch (error) {
+//     console.error("Geoapify geocode error:", error.message);
+
+//     return {
+//       formatted: `${place}, ${city}`,
+//       coordinates: null,
+//     };
+//   }
+// };---old---------------------------------------------------------------------------------------
+
+
+// const getCoordinates = async (place, city) => {
+//   try {
+//     const res = await axios.get("https://api.geoapify.com/v1/geocode/search", {
+//       params: {
+//         text: `${place}, ${city}, India`,
+//         filter: `countrycode:in`,
+//         limit: 1,
+//         apiKey: process.env.GEOAPIFY_API_KEY
+//       }
+//     });
+
+//     const result = res.data.features[0];
+
+//     if (!result) return {};
+
+//     return {
+//       formatted: result.properties.formatted,
+//       coordinates: {
+//         lat: result.properties.lat,
+//         lng: result.properties.lon
+//       }
+//     };
+//   } catch (err) {
+//     return {};
+//   }
+// };
+
+
 const getCoordinates = async (place, city) => {
   try {
-    const url = "https://api.geoapify.com/v1/geocode/search";
 
-    const res = await axios.get(url, {
-      params: {
-        text: `${place}, ${city}`,
-        limit: 1,
-        apiKey: process.env.GEOAPIFY_API_KEY,
-      },
-    });
+    // First get city center (used as bias)
+    const cityCenter = await getCityCenter(city);
 
-    // ❗ If no location found
-    if (
-      !res.data ||
-      !res.data.features ||
-      res.data.features.length === 0
-    ) {
-      return {
-        formatted: `${place}, ${city}`,
-        coordinates: null,
-      };
-    }
+    const res = await axios.get(
+      "https://api.geoapify.com/v1/geocode/search",
+      {
+        params: {
+          text: `${place}`,
+          filter: `circle:${cityCenter.lng},${cityCenter.lat},15000`,
+          bias: `proximity:${cityCenter.lng},${cityCenter.lat}`,
+          limit: 1,
+          apiKey: process.env.GEOAPIFY_API_KEY
+        }
+      }
+    );
 
     const feature = res.data.features[0];
-    const [lon, lat] = feature.geometry.coordinates;
+
+    if (!feature) return {};
 
     return {
       formatted: feature.properties.formatted,
       coordinates: {
-        lat,
-        lng: lon,
-      },
+        lat: feature.properties.lat,
+        lng: feature.properties.lon
+      }
     };
-  } catch (error) {
-    console.error("Geoapify geocode error:", error.message);
 
-    return {
-      formatted: `${place}, ${city}`,
-      coordinates: null,
-    };
+  } catch (err) {
+    return {};
   }
 };
 
@@ -112,10 +177,34 @@ const getNearbyPlaces = async (lat, lng) => {
   }));
 };
 
+const getCityCenter = async (city) => {
+  try {
+    const url = "https://api.geoapify.com/v1/geocode/search";
+
+    const res = await axios.get(url, {
+      params: {
+        text: city,
+        limit: 1,
+        apiKey: process.env.GEOAPIFY_API_KEY,
+      },
+    });
+
+    if (!res.data.features.length) return null;
+
+    const [lon, lat] = res.data.features[0].geometry.coordinates;
+
+    return { lat, lng: lon };
+  } catch {
+    return null;
+  }
+};
+
+
 module.exports = {
   getCoordinates,
   getTravelTime,
-  getNearbyPlaces, // 👈 ADD
+  getNearbyPlaces,
+  getCityCenter // 👈 ADD
 };
 
 
